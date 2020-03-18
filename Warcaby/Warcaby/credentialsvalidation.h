@@ -6,7 +6,7 @@
 class CredentialsValidation
 {
 public:
-    CredentialsValidation();
+    static bool validate(std::string login, std::string password);
 };
 
 #endif // CREDENTIALSVALIDATION_H

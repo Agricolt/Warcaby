@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -25,7 +24,7 @@ class Ui_Widget
 {
 public:
     QWidget *widget;
-    QVBoxLayout *verticalLayout_4;
+    QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout_2;
     QLabel *labelLogin;
@@ -33,30 +32,19 @@ public:
     QVBoxLayout *verticalLayout;
     QLineEdit *lineEditLogin;
     QLineEdit *lineEditPassword;
-    QVBoxLayout *verticalLayout_3;
-    QCheckBox *checkBox;
     QPushButton *pushButtonLogIn;
-    QPushButton *pushButtonExit;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
-        Widget->setWindowModality(Qt::WindowModal);
-        Widget->resize(300, 200);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(Widget->sizePolicy().hasHeightForWidth());
-        Widget->setSizePolicy(sizePolicy);
-        Widget->setMinimumSize(QSize(300, 200));
-        Widget->setMaximumSize(QSize(300, 200));
+        Widget->resize(800, 600);
         widget = new QWidget(Widget);
         widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(60, 20, 192, 152));
-        verticalLayout_4 = new QVBoxLayout(widget);
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        widget->setGeometry(QRect(300, 230, 192, 90));
+        verticalLayout_3 = new QVBoxLayout(widget);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         verticalLayout_2 = new QVBoxLayout();
@@ -91,31 +79,12 @@ public:
         horizontalLayout->addLayout(verticalLayout);
 
 
-        verticalLayout_4->addLayout(horizontalLayout);
-
-        verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        checkBox = new QCheckBox(widget);
-        checkBox->setObjectName(QString::fromUtf8("checkBox"));
-        sizePolicy.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
-        checkBox->setSizePolicy(sizePolicy);
-        checkBox->setToolTipDuration(-1);
-
-        verticalLayout_3->addWidget(checkBox);
+        verticalLayout_3->addLayout(horizontalLayout);
 
         pushButtonLogIn = new QPushButton(widget);
         pushButtonLogIn->setObjectName(QString::fromUtf8("pushButtonLogIn"));
-        pushButtonLogIn->setFlat(false);
 
         verticalLayout_3->addWidget(pushButtonLogIn);
-
-        pushButtonExit = new QPushButton(widget);
-        pushButtonExit->setObjectName(QString::fromUtf8("pushButtonExit"));
-
-        verticalLayout_3->addWidget(pushButtonExit);
-
-
-        verticalLayout_4->addLayout(verticalLayout_3);
 
 
         retranslateUi(Widget);
@@ -128,12 +97,7 @@ public:
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Warcaby - Zaloguj Si\304\231", nullptr));
         labelLogin->setText(QCoreApplication::translate("Widget", "Login: ", nullptr));
         labelPassword->setText(QCoreApplication::translate("Widget", "Has\305\202o: ", nullptr));
-#if QT_CONFIG(tooltip)
-        checkBox->setToolTip(QString());
-#endif // QT_CONFIG(tooltip)
-        checkBox->setText(QCoreApplication::translate("Widget", "Pozosta\305\204 zalogowanym", nullptr));
         pushButtonLogIn->setText(QCoreApplication::translate("Widget", "Zaloguj", nullptr));
-        pushButtonExit->setText(QCoreApplication::translate("Widget", "Wyjd\305\272", nullptr));
     } // retranslateUi
 
 };

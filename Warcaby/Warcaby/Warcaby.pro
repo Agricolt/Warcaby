@@ -18,13 +18,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     credentialsvalidation.cpp \
     main.cpp \
+    menu.cpp \
     widget.cpp
 
 HEADERS += \
     credentialsvalidation.h \
+    menu.h \
     widget.h
 
 FORMS += \
+    menu.ui \
     widget.ui
 
 # Default rules for deployment.
