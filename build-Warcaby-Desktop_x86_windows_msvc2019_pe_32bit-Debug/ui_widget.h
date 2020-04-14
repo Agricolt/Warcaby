@@ -24,7 +24,7 @@ QT_BEGIN_NAMESPACE
 class Ui_Widget
 {
 public:
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout_2;
@@ -34,6 +34,7 @@ public:
     QLineEdit *lineEditLogin;
     QLineEdit *lineEditPassword;
     QVBoxLayout *verticalLayout_3;
+    QLabel *label_IncorrectCredentials;
     QCheckBox *checkBox;
     QPushButton *pushButtonLogIn;
     QPushButton *pushButtonExit;
@@ -44,29 +45,24 @@ public:
             Widget->setObjectName(QString::fromUtf8("Widget"));
         Widget->setWindowModality(Qt::WindowModal);
         Widget->resize(300, 200);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(Widget->sizePolicy().hasHeightForWidth());
-        Widget->setSizePolicy(sizePolicy);
         Widget->setMinimumSize(QSize(300, 200));
         Widget->setMaximumSize(QSize(300, 200));
-        widget = new QWidget(Widget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(60, 20, 192, 152));
-        verticalLayout_4 = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(Widget);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(60, 20, 192, 174));
+        verticalLayout_4 = new QVBoxLayout(layoutWidget);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        labelLogin = new QLabel(widget);
+        labelLogin = new QLabel(layoutWidget);
         labelLogin->setObjectName(QString::fromUtf8("labelLogin"));
 
         verticalLayout_2->addWidget(labelLogin);
 
-        labelPassword = new QLabel(widget);
+        labelPassword = new QLabel(layoutWidget);
         labelPassword->setObjectName(QString::fromUtf8("labelPassword"));
 
         verticalLayout_2->addWidget(labelPassword);
@@ -76,13 +72,13 @@ public:
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        lineEditLogin = new QLineEdit(widget);
+        lineEditLogin = new QLineEdit(layoutWidget);
         lineEditLogin->setObjectName(QString::fromUtf8("lineEditLogin"));
         lineEditLogin->setEnabled(true);
 
         verticalLayout->addWidget(lineEditLogin);
 
-        lineEditPassword = new QLineEdit(widget);
+        lineEditPassword = new QLineEdit(layoutWidget);
         lineEditPassword->setObjectName(QString::fromUtf8("lineEditPassword"));
 
         verticalLayout->addWidget(lineEditPassword);
@@ -95,21 +91,29 @@ public:
 
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        checkBox = new QCheckBox(widget);
+        label_IncorrectCredentials = new QLabel(layoutWidget);
+        label_IncorrectCredentials->setObjectName(QString::fromUtf8("label_IncorrectCredentials"));
+
+        verticalLayout_3->addWidget(label_IncorrectCredentials);
+
+        checkBox = new QCheckBox(layoutWidget);
         checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(checkBox->sizePolicy().hasHeightForWidth());
         checkBox->setSizePolicy(sizePolicy);
         checkBox->setToolTipDuration(-1);
 
         verticalLayout_3->addWidget(checkBox);
 
-        pushButtonLogIn = new QPushButton(widget);
+        pushButtonLogIn = new QPushButton(layoutWidget);
         pushButtonLogIn->setObjectName(QString::fromUtf8("pushButtonLogIn"));
         pushButtonLogIn->setFlat(false);
 
         verticalLayout_3->addWidget(pushButtonLogIn);
 
-        pushButtonExit = new QPushButton(widget);
+        pushButtonExit = new QPushButton(layoutWidget);
         pushButtonExit->setObjectName(QString::fromUtf8("pushButtonExit"));
 
         verticalLayout_3->addWidget(pushButtonExit);
@@ -128,6 +132,7 @@ public:
         Widget->setWindowTitle(QCoreApplication::translate("Widget", "Warcaby - Zaloguj Si\304\231", nullptr));
         labelLogin->setText(QCoreApplication::translate("Widget", "Login: ", nullptr));
         labelPassword->setText(QCoreApplication::translate("Widget", "Has\305\202o: ", nullptr));
+        label_IncorrectCredentials->setText(QString());
 #if QT_CONFIG(tooltip)
         checkBox->setToolTip(QString());
 #endif // QT_CONFIG(tooltip)
