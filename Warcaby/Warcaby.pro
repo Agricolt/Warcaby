@@ -1,4 +1,5 @@
-QT       += core gui
+QT       += core gui \
+            multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,6 +20,7 @@ SOURCES += \
     boardtile.cpp \
     credentialsvalidation.cpp \
     engine.cpp \
+    list.cpp \
     main.cpp \
     menu.cpp \
     pawn.cpp \
@@ -26,10 +28,11 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
-    CONSTANTS.h \
+    CONSTANTS_ENUMS.h \
     boardtile.h \
     credentialsvalidation.h \
     engine.h \
+    list.h \
     menu.h \
     pawn.h \
     player.h \
@@ -43,3 +46,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc

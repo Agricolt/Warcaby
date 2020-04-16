@@ -268,13 +268,18 @@ Makefile: ..\Warcaby\Warcaby.pro D:\Qt\5.14.1\msvc2017\mkspecs\win32-msvc\qmake.
 		D:\Qt\5.14.1\msvc2017\mkspecs\features\yacc.prf \
 		D:\Qt\5.14.1\msvc2017\mkspecs\features\lex.prf \
 		..\Warcaby\Warcaby.pro \
+		D:\Qt\5.14.1\msvc2017\lib\Qt5Multimedia.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Widgets.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Gui.prl \
+		D:\Qt\5.14.1\msvc2017\lib\Qt5Network.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Core.prl \
 		D:\Qt\5.14.1\msvc2017\lib\qtmain.prl \
 		D:\Qt\5.14.1\msvc2017\mkspecs\features\build_pass.prf \
+		..\Warcaby\res.qrc \
+		D:\Qt\5.14.1\msvc2017\lib\Qt5Multimediad.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Widgetsd.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Guid.prl \
+		D:\Qt\5.14.1\msvc2017\lib\Qt5Networkd.prl \
 		D:\Qt\5.14.1\msvc2017\lib\Qt5Cored.prl \
 		D:\Qt\5.14.1\msvc2017\lib\qtmaind.prl
 	$(QMAKE) -o Makefile ..\Warcaby\Warcaby.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -462,13 +467,18 @@ D:\Qt\5.14.1\msvc2017\mkspecs\features\exceptions.prf:
 D:\Qt\5.14.1\msvc2017\mkspecs\features\yacc.prf:
 D:\Qt\5.14.1\msvc2017\mkspecs\features\lex.prf:
 ..\Warcaby\Warcaby.pro:
+D:\Qt\5.14.1\msvc2017\lib\Qt5Multimedia.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Widgets.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Gui.prl:
+D:\Qt\5.14.1\msvc2017\lib\Qt5Network.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Core.prl:
 D:\Qt\5.14.1\msvc2017\lib\qtmain.prl:
 D:\Qt\5.14.1\msvc2017\mkspecs\features\build_pass.prf:
+..\Warcaby\res.qrc:
+D:\Qt\5.14.1\msvc2017\lib\Qt5Multimediad.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Widgetsd.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Guid.prl:
+D:\Qt\5.14.1\msvc2017\lib\Qt5Networkd.prl:
 D:\Qt\5.14.1\msvc2017\lib\Qt5Cored.prl:
 D:\Qt\5.14.1\msvc2017\lib\qtmaind.prl:
 qmake: FORCE

@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/backgrounds">
+        <file>background_army.jpg</file>
+    </qresource>
+    <qresource prefix="/new/images"/>
+    <qresource prefix="/new/sounds"/>
+</RCC>

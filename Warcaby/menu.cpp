@@ -28,7 +28,7 @@ void Menu::on_pushButton_LogOutAndExit_clicked()
 
 void Menu::on_pushButton_startGameHotseat_clicked()
 {
-    Engine *eng = new Engine();
+    Engine *eng = new Engine(gameType::Brazilian);
     eng->show();
     this->on_pushButton_LogOutAndExit_clicked();
 }

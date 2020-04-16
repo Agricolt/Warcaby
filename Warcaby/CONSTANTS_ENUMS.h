@@ -3,6 +3,12 @@
 
 #include <QColor>
 
+enum class Colour
+{
+    White,
+    Black
+};
+
 const int BOARD_TILE_SIZE = 50;
 const int DEBUG_BOARD_SIZE = 8;
 
