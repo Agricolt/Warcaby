@@ -28,6 +28,11 @@ void boardTile::setPosition(QPoint pos)
     this->position = pos;
 }
 
+QPoint boardTile::getPosition()
+{
+    return this->position;
+}
+
 void boardTile::setTileColour(Colour colour)
 {
     this->tile_colour = colour;
@@ -35,4 +40,12 @@ void boardTile::setTileColour(Colour colour)
         this->setBrush(dark_tile);
     else
         this->setBrush(light_tile);
+}
+
+void boardTile::setDefaultColour()
+{
+    if (this->tile_colour == Colour::Black)
+        setBrush(QBrush(dark_tile));
+    else
+        setBrush(QBrush(light_tile));
 }

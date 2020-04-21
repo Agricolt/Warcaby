@@ -9,19 +9,19 @@
 
 class boardTile : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
     Colour tile_colour;
     QPoint position;
     bool selected;
-    Q_OBJECT
 public:
      boardTile(QObject *parent = nullptr);
      void setSelected();
      void setUnselected();
      void setPosition(QPoint pos);
+     QPoint getPosition();
      void setTileColour(Colour colour);
-
-signals:
-
+public slots:
+     void setDefaultColour();
 };
 
 #endif // BOARDTILE_H

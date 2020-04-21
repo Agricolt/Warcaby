@@ -20,7 +20,8 @@ SOURCES += \
     boardtile.cpp \
     credentialsvalidation.cpp \
     engine.cpp \
-    list.cpp \
+    gamerules.cpp \
+    lista.cpp \
     main.cpp \
     menu.cpp \
     pawn.cpp \
@@ -32,7 +33,8 @@ HEADERS += \
     boardtile.h \
     credentialsvalidation.h \
     engine.h \
-    list.h \
+    gamerules.h \
+    lista.h \
     menu.h \
     pawn.h \
     player.h \

@@ -1,0 +1,16 @@
+release/boardtile.o
+release/credentialsvalidation.o
+release/engine.o
+release/gamerules.o
+release/lista.o
+release/main.o
+release/menu.o
+release/pawn.o
+release/player.o
+release/widget.o
+release/qrc_res.o
+release/moc_boardtile.o
+release/moc_engine.o
+release/moc_menu.o
+release/moc_pawn.o
+release/moc_widget.o

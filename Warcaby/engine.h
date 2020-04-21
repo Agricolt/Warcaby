@@ -5,7 +5,8 @@
 #include "pawn.h"
 #include "boardtile.h"
 #include "CONSTANTS_ENUMS.h"
-#include "list.h"
+#include "lista.h"
+#include "gamerules.h"
 
 #include "Windows.h"
 
@@ -18,25 +19,12 @@
 #include <QMouseEvent>
 #include <typeinfo>
 #include <QImage>
+#include <QTimer>
 
 #include <QApplication>
 #include <QWidget>
 
-enum class tileState
-{
-    Empty,
-    WhitePawn,
-    BlackPawn,
-    WhiteQueen,
-    BlackQueen
-};
 
-enum class gameType
-{
-    Brazilian,
-    International_Polish,
-    English
-};
 
 class Engine : public QGraphicsView
 {
@@ -47,26 +35,32 @@ class Engine : public QGraphicsView
     tileState **game_board_state;
     boardTile **game_board_T;
 
-    std::vector<Pawn> player_1_pawns;
-    std::vector<Pawn> player_2_pawns;
+    std::vector<Pawn*> player_1_pawns;
+    std::vector<Pawn*> player_2_pawns;
 
     Pawn * selected_pawn;
     boardTile * selected_boardTile;
-    gameType gt;
+    GameRules *gr;
+
+    int board_size;
 
     //**************INICJALIZACJA****************
     void initializeBoard(int board_size);
     void placePawns(int pawns_count, int board_size);
-    //**************ZDARZENIA****************
+    //**************ZDARZENIA********************
     void mousePressEvent(QMouseEvent *ev);
-    //**************GRA****************
-    bool checkMove();
+    //**************GRA**************************
+    void movePawn();                             //Przemieszcza pionka na wskazaną plytke i wywoluje metode clearPawnAndTileAfterTime()
+    void wrongMove();                            //koloruje pionek i plytke na czerwono i wywoluje metode clearPawnAndTileAfterTime()
+    void clearPawnAndTileAfterTime(int time);    //Ustawia domyslny kolor i ZERUJE wskazniki na pionek i plytke!!!
+    //********************************************
 public slots:
     void handleExitButton();
-
 public:
     Engine(gameType gT);
-    void printIntTable(int board_size);
+    void printPawns(int pawns_in_row);
+    void printBoardState(int board_size);
+    void printBoardWithPawns(int board_size);
 };
 
 #endif // ENGINE_H

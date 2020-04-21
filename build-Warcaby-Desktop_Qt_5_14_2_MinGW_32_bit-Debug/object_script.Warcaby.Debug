@@ -1,0 +1,16 @@
+debug/boardtile.o
+debug/credentialsvalidation.o
+debug/engine.o
+debug/gamerules.o
+debug/lista.o
+debug/main.o
+debug/menu.o
+debug/pawn.o
+debug/player.o
+debug/widget.o
+debug/qrc_res.o
+debug/moc_boardtile.o
+debug/moc_engine.o
+debug/moc_menu.o
+debug/moc_pawn.o
+debug/moc_widget.o

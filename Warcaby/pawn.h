@@ -9,25 +9,20 @@
 #include <QGraphicsView>
 
 
-enum class pawnType
-{
-    Normal,
-    Queen
-};
-
 class Pawn : public QObject, public QGraphicsEllipseItem
 {
-    pawnType type;
-    Colour colour;
-    bool selected;
     Q_OBJECT
+    bool selected;
+    QPoint position;
 public:
+    tileState pawn_state;
     void set_selected();
     void set_unselected();
-    Pawn(Colour pC, pawnType pT, QRect rect, QObject *parent = nullptr);
-
-signals:
-
+    void setPosition(QPoint point);
+    QPoint getPosition();
+    Pawn(tileState ps, QObject *parent = nullptr);
+public slots:
+    void setDefaultColour();
 };
 
 #endif // PAWN_H
