@@ -1,6 +1,7 @@
 #ifndef GAMERULES_H
 #define GAMERULES_H
 
+#include <vector>
 #include "CONSTANTS_ENUMS.h"
 #include "lista.h"
 #include "pawn.h"
@@ -22,14 +23,14 @@ class GameRules
     canJumpMoreThanOnce,
     canQueenJumpAfterKillAnywhere;
 
-    lista *lista_ruchow;
-
-    bool checkKillsOpportunities(Pawn *selected_pawn, tileState** game_board_state);
-    bool checkCondition(int x, int y);
+    //Zwraca true jesli jest mozliwe jakiekolwiek bicie
+    lista::el* checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::vector<tileState>>& game_board_state, lista* lista_ruchow);
+    void checkSurrounding(Pawn *selected_pawn, std::vector<std::vector<tileState>>& game_board_state, lista* lista_ruchow);
+    bool checkCondition(int x, int y, int board_size);
 
 public:
     GameRules(gameType gt);
-    lista * giveAllPossibleMoves(Pawn * selected_pawn, tileState **game_board_state);
+    lista * giveAllPossibleMoves(Pawn * selected_pawn, std::vector<std::vector<tileState>>& game_board_state);
 };
 
 #endif // GAMERULES_H

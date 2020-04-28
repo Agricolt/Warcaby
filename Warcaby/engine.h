@@ -32,8 +32,11 @@ class Engine : public QGraphicsView
 
     QGraphicsScene * scene;
 
-    tileState **game_board_state;
-    boardTile **game_board_T;
+
+    //tileState **game_board_state;
+    //boardTile **game_board_T;
+    std::vector<std::vector<tileState>> game_board_state;
+    std::vector<std::vector<boardTile*>> game_board_T;
 
     std::vector<Pawn*> player_1_pawns;
     std::vector<Pawn*> player_2_pawns;
@@ -53,6 +56,7 @@ class Engine : public QGraphicsView
     void movePawn();                             //Przemieszcza pionka na wskazaną plytke i wywoluje metode clearPawnAndTileAfterTime()
     void wrongMove();                            //koloruje pionek i plytke na czerwono i wywoluje metode clearPawnAndTileAfterTime()
     void clearPawnAndTileAfterTime(int time);    //Ustawia domyslny kolor i ZERUJE wskazniki na pionek i plytke!!!
+    QPoint findDeletingPawn();
     //********************************************
 public slots:
     void handleExitButton();

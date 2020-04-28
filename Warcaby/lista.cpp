@@ -21,7 +21,27 @@ void lista::add(QPoint from, QPoint where)
         }
         pIter->pNext = el;
         el->pNext = nullptr;
+    }
+}
 
+void lista::add(lista::el *el)
+{
+    if (el == nullptr)
+        return;
+    if (pHead == nullptr)
+    {
+        pHead =el;
+        el->pNext = nullptr;
+    }
+    else
+    {
+        lista::el* pIter = this->pHead;
+        while (pIter->pNext != nullptr)
+        {
+            pIter = pIter->pNext;
+        }
+        pIter->pNext = el;
+        el->pNext = nullptr;
     }
 }
 

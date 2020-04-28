@@ -15,7 +15,8 @@ enum class tileState
     WhitePawn,
     BlackPawn,
     WhiteQueen,
-    BlackQueen
+    BlackQueen,
+    Killed
 };
 
 enum class gameType

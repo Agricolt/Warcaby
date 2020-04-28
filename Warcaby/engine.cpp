@@ -2,12 +2,24 @@
 
 void Engine::initializeBoard(int board_size)
 {
-    game_board_T = new boardTile*[board_size];
-    game_board_state = new tileState*[board_size];
+    std::vector<tileState> wektor_t(board_size);
+    std::vector<boardTile*> wektor_b(board_size);
+
+    game_board_T = std::vector<std::vector<boardTile*>>(board_size);
+
+    std::fill(wektor_t.begin(), wektor_t.end(), tileState::Empty);
+    for (int i = 0; i <board_size; i++)
+    {
+        game_board_T[i] = std::vector<boardTile*>(board_size);
+        for (int j = 0; j < board_size; j++)
+        {
+            game_board_T[i][j] = new boardTile();
+        }
+    }
     for (int i = 0; i < board_size; i++)
     {
-        this->game_board_state[i] = new tileState[board_size];
-        game_board_T[i] = new boardTile[board_size];
+        game_board_state.push_back(wektor_t);
+        game_board_T.push_back(wektor_b);
     }
     //Rozmiesc plytki na scenie
     //szerokosc SCENY (nie okna) - ilosc plytek razy rozmiar plytek dzielone na dwa to srodek sceny
@@ -20,20 +32,20 @@ void Engine::initializeBoard(int board_size)
         for (int j = 0; j < board_size; j++)
         {
             game_board_state[i][j] = tileState::Empty;
-            game_board_T[i][j].setPos(x + BOARD_TILE_SIZE*i, y + BOARD_TILE_SIZE*j);
+            game_board_T[i][j]->setPos(x + (BOARD_TILE_SIZE*i), y + (BOARD_TILE_SIZE*j));
             if (parity%2 == 0)  //jesli plytka parzysta pokoloruj na ciemno
             {
-                game_board_T[i][j].setTileColour(Colour::Black);
-                game_board_T[i][j].setPosition(QPoint(i, j));
+                game_board_T[i][j]->setTileColour(Colour::Black);
+                game_board_T[i][j]->setPosition(QPoint(i, j));
             }
             else                //jesli nie pokoloruj na jasno
             {
-                game_board_T[i][j].setTileColour(Colour::White);
-                game_board_T[i][j].setPosition(QPoint(i, j));
+                game_board_T[i][j]->setTileColour(Colour::White);
+                game_board_T[i][j]->setPosition(QPoint(i, j));
             }
 
             //dodaj plytki do sceny
-            scene->addItem(&game_board_T[i][j]);
+            scene->addItem(game_board_T[i][j]);
             parity++;
         }
         parity++;
@@ -54,11 +66,11 @@ void Engine::placePawns(int pawns_count, int board_size)
             if (pawns_placed != pawns_count)
             {
                 //jesli plytka jest ciemna to daj na nią pionka
-                if (this->game_board_T[i][j].brush().color() == dark_tile)
+                if (this->game_board_T[i][j]->brush().color() == dark_tile)
                 {
                     //ustal pozycje wzgledem aktualnie iterowanej plytki
-                    x = game_board_T[i][j].pos().x();
-                    y = game_board_T[i][j].pos().y();
+                    x = game_board_T[i][j]->pos().x();
+                    y = game_board_T[i][j]->pos().y();
                     Pawn *p = new Pawn(actual_colour);
                     p->setPosition(QPoint(i, j));
                     p->setPos(x + 5, y + 5);
@@ -92,10 +104,10 @@ void Engine::placePawns(int pawns_count, int board_size)
                     j = 5;
                 i = 0;
                 //te same instrukcje co wczesniej, poniewaz musimy dodac pionka na miejsce skoku
-                if (this->game_board_T[i][j].brush().color() == dark_tile)
+                if (this->game_board_T[i][j]->brush().color() == dark_tile)
                 {
-                    x = game_board_T[i][j].pos().x();
-                    y = game_board_T[i][j].pos().y();
+                    x = game_board_T[i][j]->pos().x();
+                    y = game_board_T[i][j]->pos().y();
                     //wprowadz do tablicy pionkow informacje ze jest tam pionek
                     Pawn *p = new Pawn(actual_colour);
                     p->setPosition(QPoint(i, j));
@@ -139,37 +151,34 @@ void Engine::mousePressEvent(QMouseEvent *ev)
         {
             this->selected_boardTile = selected_board_tile;
             this->selected_boardTile->setSelected();
-            lista *lista_mozliwych_ruchow = gr->giveAllPossibleMoves(selected_pawn, this->game_board_state);
-            if (lista_mozliwych_ruchow->find(selected_pawn->getPosition(), selected_boardTile->getPosition()))      //jesli wskazany ruch znajduje sie w liscie mozliwych ruchow to go wykonaj
-                movePawn();
-            else
-                wrongMove();
+            lista *lista_mozliwych_ruchow = gr->giveAllPossibleMoves(selected_pawn, game_board_state);
+            if (lista_mozliwych_ruchow != nullptr)
+            {
+                if (lista_mozliwych_ruchow->find(selected_pawn->getPosition(), selected_boardTile->getPosition()))      //jesli wskazany ruch znajduje sie w liscie mozliwych ruchow to go wykonaj
+                    movePawn();
+                else
+                    wrongMove();
+            }
         }
+
     }
 }
 
 void Engine::movePawn()
 {
-    this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::Empty;  //Usun pionek ze starego miejsca
-    this->selected_pawn->setPosition(selected_boardTile->getPosition());    //ustaw pozycje pionka na nowe miejsce (zaznaczone)
+    //jesli pionek przeskoczyl o dwa miejsca to znaczy że zbija pionka drużyny przeciwnej
+    if (std::abs(selected_pawn->getPosition().x() - selected_boardTile->getPosition().x()) == 2 || std::abs(selected_pawn->getPosition().y() - selected_boardTile->getPosition().y()) == 2)
+    {
+        QPoint pt = findDeletingPawn();
+        //game_board_state[pt.x()][pt.y()] = tileState::Empty;
+        printBoardState(8);
+        printBoardWithPawns(8);
+
+    }
+    game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::Empty;  //Usun pionek ze starego miejsca
+    selected_pawn->setPosition(selected_boardTile->getPosition());  //przypisz mu nowa pozycje
+    this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = selected_pawn->pawn_state; //ustaw pionka na noawej pozycji
     selected_pawn->setPos(selected_boardTile->pos().x() + 5, selected_boardTile->pos().y() + 5);    //ustaw pionka na podanym kafelku z dodatkiem 5 px zeby byl po srodku
-    //Dodaj pionek na nowe miejsce, zaleznie od tego jaki to jest pionek (caly if)
-    if (selected_pawn->pawn_state == tileState::BlackPawn)
-    {
-        this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::BlackPawn;
-    }
-    else if (selected_pawn->pawn_state == tileState::WhitePawn)
-    {
-        this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::WhitePawn;
-    }
-    else if (selected_pawn->pawn_state == tileState::WhiteQueen)
-    {
-        this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::WhiteQueen;
-    }
-    else if (selected_pawn->pawn_state == tileState::BlackQueen)
-    {
-        this->game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::BlackQueen;
-    }
     clearPawnAndTileAfterTime(500);
 }
 
@@ -190,6 +199,51 @@ void Engine::clearPawnAndTileAfterTime(int time)
     timer->start(time);
     selected_pawn = nullptr;
     selected_boardTile = nullptr;
+}
+
+QPoint Engine::findDeletingPawn()
+{
+    QPoint pt1 = selected_pawn->getPosition();
+    QPoint pt2 = selected_boardTile->getPosition();
+    QPoint deleted_pos;
+    int x1 = pt1.x(), y1 = pt1.y();
+    int x2 = pt2.x(), y2 = pt2.y();
+
+    x1 += 2;
+    y1 += 2;
+    if (x1 == x2 && y1 == y2)
+    {
+        deleted_pos.setX(x1 - 1);
+        deleted_pos.setY(y1 - 1);
+    }
+
+    x1 = pt1.x(), y1 = pt1.y();
+    x1 -= 2;
+    y1 -= 2;
+    if (x1 == x2 && y1 == y2)
+    {
+        deleted_pos.setX(x1 + 1);
+        deleted_pos.setY(y1 + 1);
+    }
+
+    x1 = pt1.x(), y1 = pt1.y();
+    x1 -= 2;
+    y1 += 2;
+    if (x1 == x2 && y1 == y2)
+    {
+        deleted_pos.setX(x1 + 1);
+        deleted_pos.setY(y1 - 1);
+    }
+
+    x1 = pt1.x(), y1 = pt1.y();
+    x1 += 2;
+    y1 -= 2;
+    if (x1 == x2 && y1 == y2)
+    {
+        deleted_pos.setX(x1 - 1);
+        deleted_pos.setY(y1 + 1);
+    }
+    return deleted_pos;
 }
 
 
@@ -243,7 +297,11 @@ Engine::Engine(gameType gT) :
     exitButton->setGeometry(650, 550, 100, 30);
     QObject::connect(exitButton, SIGNAL(released()), this, SLOT(handleExitButton()));
 
+    printBoardState(8);
+    printBoardWithPawns(8);
 
+
+    /*
     AllocConsole();
     AttachConsole(GetCurrentProcessId());
     freopen("CON", "w", stdout);
@@ -263,6 +321,12 @@ Engine::Engine(gameType gT) :
 
     std::cout << '\n';
     std::cout << lista->find(6, 9, 6, 6);
+    */
+
+    /*
+    printBoardWithPawns(8);
+    printBoardState(8);
+    printPawns(4);
     */
 
 
@@ -292,7 +356,7 @@ void Engine::printBoardWithPawns(int board_size)
         {
             if (game_board_state[i][j] == tileState::WhitePawn || game_board_state[i][j] == tileState::BlackPawn)
             {
-                std::cout << game_board_T[i][j].getPosition().x() << ";" << game_board_T[i][j].getPosition().y() << ",      ";
+                std::cout << game_board_T[i][j]->getPosition().x() << ";" << game_board_T[i][j]->getPosition().y() << ",      ";
             }
         }
         std::cout << '\n';
