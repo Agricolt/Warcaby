@@ -17,7 +17,6 @@ class Pawn : public QObject, public QGraphicsEllipseItem
 public:
     tileState pawn_state;
     void set_selected();
-    void set_unselected();
     void setPosition(QPoint point);
     QPoint getPosition();
     Pawn(tileState ps, QObject *parent = nullptr);
