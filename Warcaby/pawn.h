@@ -18,6 +18,7 @@ public:
     tileState pawn_state;
     void set_selected();
     void setPosition(QPoint point);
+    void transformToQueen();
     QPoint getPosition();
     Pawn(tileState ps, QObject *parent = nullptr);
 public slots:

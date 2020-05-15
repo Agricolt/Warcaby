@@ -7,4 +7,8 @@
         <file>james_bond.mp3</file>
         <file>mainthemeorg.mp3</file>
     </qresource>
+    <qresource prefix="/graphics">
+        <file>black_queen.png</file>
+        <file>white_queen.png</file>
+    </qresource>
 </RCC>

@@ -50,13 +50,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_StartGameWithAI">
-      <property name="text">
-       <string>Rozpocznij grę z komputerem</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QPushButton" name="pushButton_LogOutAndExit">
       <property name="text">
        <string>Wyloguj i wyjdź</string>

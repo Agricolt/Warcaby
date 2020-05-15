@@ -189,7 +189,7 @@ void Engine::movePawn()
 {
     //jesli pionek przeskoczyl o dwa miejsca to znaczy że zbija pionka drużyny przeciwnej
     bool killed_confirmed = false;
-    if (std::abs(selected_pawn->getPosition().x() - selected_boardTile->getPosition().x()) == 2 || std::abs(selected_pawn->getPosition().y() - selected_boardTile->getPosition().y()) == 2)
+    if (std::abs(selected_pawn->getPosition().x() - selected_boardTile->getPosition().x()) >= 2 || std::abs(selected_pawn->getPosition().y() - selected_boardTile->getPosition().y()) >= 2)
     {
         killed_confirmed = true;
         Pawn * pawn = findDeletingPawn();
@@ -257,14 +257,14 @@ void Engine::checkForQueens()
     {
         if ((*i).getPosition().y() == 0)
         {
-            (*i).pawn_state = tileState::WhiteQueen;
+            (*i).transformToQueen();
         }
     }
     for (auto i : this->player_2_pawns)
     {
         if ((*i).getPosition().y() == 7)
         {
-            (*i).pawn_state = tileState::BlackQueen;
+            (*i).transformToQueen();
         }
     }
 }
@@ -272,53 +272,101 @@ void Engine::checkForQueens()
 Pawn * Engine::findDeletingPawn()
 {
     bool which_colour; //false - szukaj wsrod bialych, true - szukaj wsrod czarnych
-    if (selected_pawn->pawn_state == tileState::WhitePawn || selected_pawn->pawn_state == tileState::WhiteQueen)
-        which_colour = true;
-    else
-        which_colour = false;
-    QPoint pt1 = selected_pawn->getPosition();
-    QPoint pt2 = selected_boardTile->getPosition();
-    QPoint deleted_pos;
-    int x1 = pt1.x(), y1 = pt1.y();
-    int x2 = pt2.x(), y2 = pt2.y();
-
-    x1 += 2;
-    y1 += 2;
-    if (x1 == x2 && y1 == y2)
+    if (selected_pawn->pawn_state == tileState::WhitePawn || selected_pawn->pawn_state == tileState::BlackPawn)
     {
-        deleted_pos.setX(x1 - 1);
-        deleted_pos.setY(y1 - 1);
-        return selectPawnFromVector(deleted_pos, which_colour);
+        if (selected_pawn->pawn_state == tileState::WhitePawn)
+            which_colour = true;
+        else
+            which_colour = false;
+        QPoint pt1 = selected_pawn->getPosition();
+        QPoint pt2 = selected_boardTile->getPosition();
+        QPoint deleted_pos;
+        int x1 = pt1.x(), y1 = pt1.y();
+        int x2 = pt2.x(), y2 = pt2.y();
+
+        x1 += 2;
+        y1 += 2;
+        if (x1 == x2 && y1 == y2)
+        {
+            deleted_pos.setX(x1 - 1);
+            deleted_pos.setY(y1 - 1);
+            return selectPawnFromVector(deleted_pos, which_colour);
+        }
+
+        x1 = pt1.x(), y1 = pt1.y();
+        x1 -= 2;
+        y1 -= 2;
+        if (x1 == x2 && y1 == y2)
+        {
+            deleted_pos.setX(x1 + 1);
+            deleted_pos.setY(y1 + 1);
+            return selectPawnFromVector(deleted_pos, which_colour);
+        }
+
+        x1 = pt1.x(), y1 = pt1.y();
+        x1 -= 2;
+        y1 += 2;
+        if (x1 == x2 && y1 == y2)
+        {
+            deleted_pos.setX(x1 + 1);
+            deleted_pos.setY(y1 - 1);
+            return selectPawnFromVector(deleted_pos, which_colour);
+        }
+
+        x1 = pt1.x(), y1 = pt1.y();
+        x1 += 2;
+        y1 -= 2;
+        if (x1 == x2 && y1 == y2)
+        {
+            deleted_pos.setX(x1 - 1);
+            deleted_pos.setY(y1 + 1);
+            return selectPawnFromVector(deleted_pos, which_colour);
+        }
     }
-
-    x1 = pt1.x(), y1 = pt1.y();
-    x1 -= 2;
-    y1 -= 2;
-    if (x1 == x2 && y1 == y2)
+    else //FOR QUEENS********************************
     {
-        deleted_pos.setX(x1 + 1);
-        deleted_pos.setY(y1 + 1);
-        return selectPawnFromVector(deleted_pos, which_colour);
-    }
-
-    x1 = pt1.x(), y1 = pt1.y();
-    x1 -= 2;
-    y1 += 2;
-    if (x1 == x2 && y1 == y2)
-    {
-        deleted_pos.setX(x1 + 1);
-        deleted_pos.setY(y1 - 1);
-        return selectPawnFromVector(deleted_pos, which_colour);
-    }
-
-    x1 = pt1.x(), y1 = pt1.y();
-    x1 += 2;
-    y1 -= 2;
-    if (x1 == x2 && y1 == y2)
-    {
-        deleted_pos.setX(x1 - 1);
-        deleted_pos.setY(y1 + 1);
-        return selectPawnFromVector(deleted_pos, which_colour);
+        bool which_colour;
+        if (selected_pawn->pawn_state == tileState::WhiteQueen)
+            which_colour = true;
+        else
+            which_colour = false;
+        Pawn * deleted_pawn = nullptr;
+        //skos prawo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i++, j++)
+        {
+            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
+            {
+                return deleted_pawn;
+            }
+        }
+        //skos lewo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i--, j++)
+        {
+            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
+            {
+                return deleted_pawn;
+            }
+        }
+        //skos prawo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i++, j--)
+        {
+            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
+            {
+                return deleted_pawn;
+            }
+        }
+        //skos lewo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i--, j--)
+        {
+            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
+            {
+                return deleted_pawn;
+            }
+        }
     }
     return nullptr;
 }
@@ -327,7 +375,7 @@ Pawn *Engine::selectPawnFromVector(QPoint pt, bool which_colour)
 {
     if (which_colour == true)
     {
-        for (int i = 0; i < player_2_pawns.size(); i ++)
+        for (unsigned int i = 0; i < player_2_pawns.size(); i ++)
         {
             if (player_2_pawns[i]->getPosition() == pt)
             {
@@ -337,7 +385,7 @@ Pawn *Engine::selectPawnFromVector(QPoint pt, bool which_colour)
     }
     else
     {
-        for (int i = 0; i < player_1_pawns.size(); i ++)
+        for (unsigned int i = 0; i < player_1_pawns.size(); i ++)
         {
             if (player_1_pawns[i]->getPosition() == pt)
             {
@@ -345,6 +393,7 @@ Pawn *Engine::selectPawnFromVector(QPoint pt, bool which_colour)
             }
         }
     }
+    return nullptr;
 }
 
 

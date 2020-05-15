@@ -147,6 +147,8 @@ release/qrc_res.cpp: ../Warcaby/res.qrc \
 		../../../Qt/5.14.2/mingw73_32/bin/rcc.exe \
 		../Warcaby/mainthemeorg.mp3 \
 		../Warcaby/james_bond.mp3 \
+		../Warcaby/black_queen.png \
+		../Warcaby/white_queen.png \
 		../Warcaby/background_army.jpg \
 		../Warcaby/splash.jpg
 	D:\Qt\5.14.2\mingw73_32\bin\rcc.exe -name res ..\Warcaby\res.qrc -o release\qrc_res.cpp
@@ -1497,10 +1499,7 @@ release/main.o: ../Warcaby/main.cpp ../Warcaby/widget.h \
 		../../../Qt/5.14.2/mingw73_32/include/QtMultimedia/qmediaenumdebug.h \
 		../../../Qt/5.14.2/mingw73_32/include/QtCore/qmetaobject.h \
 		../../../Qt/5.14.2/mingw73_32/include/QtMultimedia/qaudio.h \
-		../../../Qt/5.14.2/mingw73_32/include/QtNetwork/qnetworkconfiguration.h \
-		../../../Qt/5.14.2/mingw73_32/include/QtCore/QTimer \
-		../../../Qt/5.14.2/mingw73_32/include/QtCore/qtimer.h \
-		../../../Qt/5.14.2/mingw73_32/include/QtCore/qbasictimer.h
+		../../../Qt/5.14.2/mingw73_32/include/QtNetwork/qnetworkconfiguration.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\Warcaby\main.cpp
 
 release/menu.o: ../Warcaby/menu.cpp ../Warcaby/menu.h \

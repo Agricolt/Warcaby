@@ -35,7 +35,10 @@ const QColor wrong_tile = QColor(143, 12, 18);
 
 const QColor light_pawn = QColor(207, 221, 250);
 const QColor dark_pawn = QColor(32, 23, 4);
+const QColor light_queen = QColor(253, 244, 83);
+const QColor dark_queen = QColor(194, 185, 3);
 const QColor wrong_pawn = QColor(241, 84, 91);
+const QColor selected_pawn = QColor(34, 177, 76);
 
 
 

@@ -96,6 +96,7 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
             if (checkCondition(x-1, y-1, game_board_state.size()))
             {
                 if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x-1][y-1] == tileState::Empty)
+                    if (game_board_state[x-1][y-1] == tileState::Empty)
                     possibilities = 2;
             }
         }
@@ -111,7 +112,7 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     possibilities = 2;
             }
         }
-        if (this->canKillBackwards)
+        if (this->canKillBackwards == true)
         {
             y = y + 2;
             if (checkCondition(x, y, game_board_state.size()))
@@ -133,6 +134,118 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
             }
         }
     }
+    x = selected_pawn->getPosition().x();
+    y = selected_pawn->getPosition().y();
+    //********************************FOR QUEENS*********************************
+    if (selected_pawn->pawn_state == tileState::WhiteQueen || selected_pawn->pawn_state == tileState::BlackQueen)
+    {
+        int nr_of_pawns_in_way = 0; //zapobiega sytuacji w ktorej damka "pomysli" ze moze przeskoczyc i zabic wiecej niz jednego pionka
+        tileState colour_to_kill1, colour_to_kill12;
+        if (selected_pawn->pawn_state == tileState::WhiteQueen)
+        {
+            colour_to_kill1 = tileState::BlackPawn;
+            colour_to_kill12 = tileState::BlackQueen;
+        }
+        else
+        {
+            colour_to_kill1 = tileState::WhitePawn;
+            colour_to_kill12 = tileState::WhiteQueen;
+        }
+        //skos prawo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j++)
+        {
+            if (checkCondition(i, j, board_size))
+            {
+                if (game_board_state[i][j] == tileState::Empty)
+                    if (possibilities == 0)
+                        possibilities = 1;
+            }
+            if (checkCondition(i+1, j+1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 + 1, j2 + 1, board_size))
+                                if (game_board_state[i2+1][j2+1] == tileState::Empty)
+                                    possibilities = 2;
+                    }
+                }
+            }
+        }
+        //skos lewo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j++)
+        {
+            if (checkCondition(i, j, board_size))
+            {
+                if (game_board_state[i][j] == tileState::Empty)
+                    if (possibilities == 0)
+                        possibilities = 1;
+            }
+            if (checkCondition(i-1, j+1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 - 1, j2 + 1, board_size))
+                                if (game_board_state[i2-1][j2+1] == tileState::Empty)
+                                    possibilities = 2;
+                    }
+                }
+            }
+        }
+        //skos prawo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j--)
+        {
+            if (checkCondition(i, j, board_size))
+            {
+                if (game_board_state[i][j] == tileState::Empty)
+                    if (possibilities == 0)
+                        possibilities = 1;
+            }
+            if (checkCondition(i+1, j-1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 + 1, j2 - 1, board_size))
+                                if (game_board_state[i2+1][j2-1] == tileState::Empty)
+                                    possibilities = 2;
+                    }
+                }
+            }
+        }
+        //skos lewo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j--)
+        {
+            if (checkCondition(i, j, board_size))
+            {
+                 if (game_board_state[i][j] == tileState::Empty)
+                     if (possibilities == 0)
+                         possibilities = 1;
+            }
+            if (checkCondition(i-1, j-1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 - 1, j2 - 1, board_size))
+                                if (game_board_state[i2-1][j2-1] == tileState::Empty)
+                                    possibilities = 2;
+                    }
+                }
+            }
+        }
+    }
+    //********************************FOR QUEENS********************************
+    //**********************************END*************************************
     x = selected_pawn->getPosition().x();
     y = selected_pawn->getPosition().y();
     if (selected_pawn->pawn_state == tileState::BlackPawn)
@@ -161,7 +274,7 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     possibilities = 2;
             }
         }
-        if (this->canKillBackwards)
+        if (this->canKillBackwards == true)
         {
             y = y - 2;
             if (checkCondition(x, y, game_board_state.size()))
@@ -226,7 +339,37 @@ bool GameRules::findMoveInNonKillMoves(lista::el *el, Pawn* selected_pawn, const
             if (game_board_state[x][y] == tileState::Empty)
                 lista->add(pt, QPoint(x, y));
         }
+    } //*********************FOR QUEENS*********************************
+    else if (selected_pawn->pawn_state == tileState::BlackQueen || selected_pawn->pawn_state == tileState::WhiteQueen)
+    {
+        QPoint pt = selected_pawn->getPosition();
+        //skos prawo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j++)
+        {
+            if (game_board_state[i][j] == tileState::Empty)
+                lista->add(pt, QPoint(i, j));
+        }
+        //skos lewo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j++)
+        {
+            if (game_board_state[i][j] == tileState::Empty)
+                lista->add(pt, QPoint(i, j));
+        }
+        //skos prawo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j--)
+        {
+            if (game_board_state[i][j] == tileState::Empty)
+                lista->add(pt, QPoint(i, j));
+        }
+        //skos lewo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j--)
+        {
+            if (game_board_state[i][j] == tileState::Empty)
+                lista->add(pt, QPoint(i, j));
+        }
     }
+    //*********************FOR QUEENS*********************************
+    //************************END*************************************
     return lista->find(el->from, el->where);
 }
 
@@ -246,12 +389,12 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                 lista->add(pt, QPoint(x-1, y-1));
         }
         x = x + 2;
-        if (checkCondition(x, y, game_board_state.size()))
+        if (checkCondition(x, y, game_board_state.size()) && checkCondition(x+1, y-1, game_board_state.size()))
         {
             if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x+1][y-1] == tileState::Empty)
                 lista->add(pt, QPoint(x+1, y-1));
         }
-        if (this->canKillBackwards)
+        if (this->canKillBackwards == true)
         {
             y += 2;
             if (checkCondition(x, y, game_board_state.size()))
@@ -267,10 +410,10 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
             x -= 2;
             if (checkCondition(x, y, game_board_state.size()))
             {
-                if (checkCondition(x-1, y-1, game_board_state.size()))
+                if (checkCondition(x-1, y+1, game_board_state.size()))
                 {
-                    if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x-1][y-1] == tileState::Empty)
-                        lista->add(pt, QPoint(x-1, y-1));
+                    if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x-1][y+1] == tileState::Empty)
+                        lista->add(pt, QPoint(x-1, y+1));
                 }
             }
         }
@@ -282,18 +425,18 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
             y = pt.y();
         x++;
         y++;
-        if (checkCondition(x, y, game_board_state.size()))
+        if (checkCondition(x, y, game_board_state.size()) && checkCondition(x+1, y+1, game_board_state.size()))
         {
             if ((game_board_state[x][y] == tileState::WhitePawn || game_board_state[x][y] == tileState::WhiteQueen) && game_board_state[x+1][y+1] == tileState::Empty)
                 lista->add(pt, QPoint(x+1, y+1));
         }
         x = x - 2;
-        if (checkCondition(x, y, game_board_state.size()))
+        if (checkCondition(x, y, game_board_state.size()) && checkCondition(x-1, y+1, game_board_state.size()))
         {
             if ((game_board_state[x][y] == tileState::WhitePawn || game_board_state[x][y] == tileState::WhiteQueen) && game_board_state[x-1][y+1] == tileState::Empty)
                 lista->add(pt, QPoint(x-1, y+1));
         }
-        if (this->canKillBackwards)
+        if (this->canKillBackwards == true)
         {
             y = y - 2;
             if (checkCondition(x, y, game_board_state.size()))
@@ -314,9 +457,95 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                 }
             }
         }
+    } //****************************FOR QUEENS**********************************
+    else if (selected_pawn->pawn_state == tileState::BlackQueen || selected_pawn->pawn_state == tileState::WhiteQueen)
+    {
+        QPoint pt = selected_pawn->getPosition();
+        tileState colour_to_kill1, colour_to_kill12;
+        if (selected_pawn->pawn_state == tileState::WhiteQueen)
+        {
+            colour_to_kill1 = tileState::BlackPawn;
+            colour_to_kill12 = tileState::BlackQueen;
+        }
+        else
+        {
+            colour_to_kill1 = tileState::WhitePawn;
+            colour_to_kill12 = tileState::WhiteQueen;
+        }
+        //skos prawo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j++)
+        {
+            if (checkCondition(i+1, j+1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 + 1, j2 + 1, board_size))
+                                if (game_board_state[i2+1][j2+1] == tileState::Empty)
+                                    lista->add(pt, QPoint(i2, j2));
+                    }
+                }
+            }
+        }
+        //skos lewo dol
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j++)
+        {
+            if (checkCondition(i-1, j+1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 - 1, j2 + 1, board_size))
+                                if (game_board_state[i2-1][j2+1] == tileState::Empty)
+                                    lista->add(pt, QPoint(i2, j2));
+                    }
+                }
+            }
+        }
+        //skos prawo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j--)
+        {
+            if (checkCondition(i+1, j-1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 + 1, j2 - 1, board_size))
+                                if (game_board_state[i2+1][j2-1] == tileState::Empty)
+                                    lista->add(pt, QPoint(i2, j2));
+                    }
+                }
+            }
+        }
+        //skos lewo gora
+        for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j--)
+        {
+            if (checkCondition(i-1, j-1, game_board_state.size()))
+            {
+                if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                {
+                    for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
+                    {
+                        if (game_board_state[i2][j2] == tileState::Empty)
+                            if(checkCondition(i2 - 1, j2 - 1, board_size))
+                                if (game_board_state[i2-1][j2-1] == tileState::Empty)
+                                    lista->add(pt, QPoint(i2, j2));
+                    }
+                }
+            }
+        }
     }
+    //****************************FOR QUEENS**********************************
+    //*******************************END**************************************
     return lista->find(el->from, el->where);
 }
+
 bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::vector<tileState>>& game_board_state)
 {
     bool canKill = false;
@@ -481,6 +710,91 @@ bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::ve
             }
         }
     }
+    //****************************FOR QUEENS**********************************
+        if (selected_pawn->pawn_state == tileState::BlackQueen || selected_pawn->pawn_state == tileState::WhiteQueen)
+        {
+            tileState colour_to_kill1, colour_to_kill12;
+            if (selected_pawn->pawn_state == tileState::WhiteQueen)
+            {
+                colour_to_kill1 = tileState::BlackPawn;
+                colour_to_kill12 = tileState::BlackQueen;
+            }
+            else
+            {
+                colour_to_kill1 = tileState::WhitePawn;
+                colour_to_kill12 = tileState::WhiteQueen;
+            }
+            //skos prawo dol
+            for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j++)
+            {
+                if (checkCondition(i+1, j+1, game_board_state.size()))
+                {
+                    if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                    {
+                        for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
+                        {
+                            if (game_board_state[i2][j2] == tileState::Empty)
+                                if(checkCondition(i2 + 1, j2 + 1, board_size))
+                                    if (game_board_state[i2+1][j2+1] == tileState::Empty)
+                                            canKill = true;
+                        }
+                    }
+                }
+            }
+            //skos lewo dol
+            for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j++)
+            {
+                if (checkCondition(i-1, j+1, game_board_state.size()))
+                {
+                    if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                    {
+                        for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
+                        {
+                            if (game_board_state[i2][j2] == tileState::Empty)
+                                if(checkCondition(i2 - 1, j2 + 1, board_size))
+                                    if (game_board_state[i2-1][j2+1] == tileState::Empty)
+                                            canKill = true;
+                        }
+                    }
+                }
+            }
+            //skos prawo gora
+            for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i++, j--)
+            {
+                if (checkCondition(i+1, j-1, game_board_state.size()))
+                {
+                    if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                    {
+                        for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
+                        {
+                            if (game_board_state[i2][j2] == tileState::Empty)
+                                if(checkCondition(i2 + 1, j2 - 1, board_size))
+                                    if (game_board_state[i2+1][j2-1] == tileState::Empty)
+                                            canKill = true;
+                        }
+                    }
+                }
+            }
+            //skos lewo gora
+            for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); checkCondition(i, j, board_size) == true; i--, j--)
+            {
+                if (checkCondition(i-1, j-1, game_board_state.size()))
+                {
+                    if ((game_board_state[i][j] == colour_to_kill1 || game_board_state[i][j] == colour_to_kill12))
+                    {
+                        for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
+                        {
+                            if (game_board_state[i2][j2] == tileState::Empty)
+                                if(checkCondition(i2 - 1, j2 - 1, board_size))
+                                    if (game_board_state[i2-1][j2-1] == tileState::Empty)
+                                            canKill = true;
+                        }
+                    }
+                }
+            }
+        }
+        //****************************FOR QUEENS**********************************
+        //*******************************END**************************************
     return canKill;
 }
 

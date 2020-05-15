@@ -25,7 +25,6 @@ public:
     QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QPushButton *pushButton_startGameHotseat;
-    QPushButton *pushButton_StartGameWithAI;
     QPushButton *pushButton_LogOutAndExit;
 
     void setupUi(QWidget *Menu)
@@ -51,11 +50,6 @@ public:
 
         verticalLayout->addWidget(pushButton_startGameHotseat);
 
-        pushButton_StartGameWithAI = new QPushButton(layoutWidget);
-        pushButton_StartGameWithAI->setObjectName(QString::fromUtf8("pushButton_StartGameWithAI"));
-
-        verticalLayout->addWidget(pushButton_StartGameWithAI);
-
         pushButton_LogOutAndExit = new QPushButton(layoutWidget);
         pushButton_LogOutAndExit->setObjectName(QString::fromUtf8("pushButton_LogOutAndExit"));
 
@@ -72,7 +66,6 @@ public:
         Menu->setWindowTitle(QCoreApplication::translate("Menu", "Form", nullptr));
         label_Welcome->setText(QCoreApplication::translate("Menu", "Witaj <login>", nullptr));
         pushButton_startGameHotseat->setText(QCoreApplication::translate("Menu", "Rozpocznij gr\304\231 na 2 osoby (hotseat)", nullptr));
-        pushButton_StartGameWithAI->setText(QCoreApplication::translate("Menu", "Rozpocznij gr\304\231 z komputerem", nullptr));
         pushButton_LogOutAndExit->setText(QCoreApplication::translate("Menu", "Wyloguj i wyjd\305\272", nullptr));
     } // retranslateUi
 
