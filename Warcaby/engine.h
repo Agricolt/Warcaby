@@ -47,6 +47,12 @@ class Engine : public QGraphicsView
     GameRules *gr;
 
     int board_size;
+
+    //0 - ruch zostal wykonany
+    //1 - ruch zostal wykoanny z biciem
+    //2 - ruch zostal wykonany bez bicia
+    int last_move;
+
     bool whiteMove;  //jesli true to jest ruch gracza bialego
 
     //**************INICJALIZACJA****************

@@ -18,7 +18,10 @@ GameRules::GameRules(gameType gt)
     }
 }
 
-bool GameRules::isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile, const std::vector<std::vector<tileState>>& game_board_state
+//0 - ruch nie moze zostac wykonany
+//1 - ruch moze zostac wykoanny z biciem
+//2 - ruch moze zostac wykonany bez bicia
+int GameRules::isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile, const std::vector<std::vector<tileState>>& game_board_state
                            , const std::vector<Pawn*>& player_1_pawns, const std::vector<Pawn*>& player_2_pawns, bool whiteMove)
 {
     std::vector<Pawn*> pawns_able_to_move;
@@ -33,7 +36,10 @@ bool GameRules::isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile
                 lista::el * el = new lista::el(selected_pawn->getPosition(), selected_board_tile->getPosition());
                 bool a = findMoveInNonKillMoves(el, selected_pawn, game_board_state);
                 delete el;
-                return a;
+                if (a)
+                    return 2;
+                else
+                    return 0;
             }
         }
     }
@@ -47,7 +53,10 @@ bool GameRules::isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile
                 lista::el * el = new lista::el(selected_pawn->getPosition(), selected_board_tile->getPosition());
                 bool a = findMoveInKillMoves(el, selected_pawn, game_board_state);
                 delete el;
-                return a;
+                if (a)
+                    return 1;
+                else
+                    return 0;
             }
         }
     }
@@ -126,9 +135,9 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
             x -= 2;
             if (checkCondition(x, y, game_board_state.size()))
             {
-                if (checkCondition(x-1, y-1, game_board_state.size()))
+                if (checkCondition(x-1, y+1, game_board_state.size()))
                 {
-                    if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x-1][y-1] == tileState::Empty)
+                    if ((game_board_state[x][y] == tileState::BlackPawn || game_board_state[x][y] == tileState::BlackQueen) && game_board_state[x-1][y+1] == tileState::Empty)
                     possibilities = 2;
                 }
             }
@@ -167,8 +176,6 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 + 1, j2 + 1, board_size))
-                                if (game_board_state[i2+1][j2+1] == tileState::Empty)
                                     possibilities = 2;
                     }
                 }
@@ -190,8 +197,6 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 - 1, j2 + 1, board_size))
-                                if (game_board_state[i2-1][j2+1] == tileState::Empty)
                                     possibilities = 2;
                     }
                 }
@@ -213,8 +218,6 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 + 1, j2 - 1, board_size))
-                                if (game_board_state[i2+1][j2-1] == tileState::Empty)
                                     possibilities = 2;
                     }
                 }
@@ -236,9 +239,7 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
                     for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 - 1, j2 - 1, board_size))
-                                if (game_board_state[i2-1][j2-1] == tileState::Empty)
-                                    possibilities = 2;
+                                   possibilities = 2;
                     }
                 }
             }
@@ -482,8 +483,6 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                     for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 + 1, j2 + 1, board_size))
-                                if (game_board_state[i2+1][j2+1] == tileState::Empty)
                                     lista->add(pt, QPoint(i2, j2));
                     }
                 }
@@ -499,8 +498,6 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                     for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 - 1, j2 + 1, board_size))
-                                if (game_board_state[i2-1][j2+1] == tileState::Empty)
                                     lista->add(pt, QPoint(i2, j2));
                     }
                 }
@@ -516,8 +513,6 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                     for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 + 1, j2 - 1, board_size))
-                                if (game_board_state[i2+1][j2-1] == tileState::Empty)
                                     lista->add(pt, QPoint(i2, j2));
                     }
                 }
@@ -533,8 +528,6 @@ bool GameRules::findMoveInKillMoves(lista::el *el, Pawn *selected_pawn, const st
                     for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
                     {
                         if (game_board_state[i2][j2] == tileState::Empty)
-                            if(checkCondition(i2 - 1, j2 - 1, board_size))
-                                if (game_board_state[i2-1][j2-1] == tileState::Empty)
                                     lista->add(pt, QPoint(i2, j2));
                     }
                 }
@@ -734,8 +727,6 @@ bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::ve
                         for (int i2 = i + 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2++, j2++)
                         {
                             if (game_board_state[i2][j2] == tileState::Empty)
-                                if(checkCondition(i2 + 1, j2 + 1, board_size))
-                                    if (game_board_state[i2+1][j2+1] == tileState::Empty)
                                             canKill = true;
                         }
                     }
@@ -751,8 +742,6 @@ bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::ve
                         for (int i2 = i - 1, j2 = j + 1; checkCondition(i2, j2, board_size) == true; i2--, j2++)
                         {
                             if (game_board_state[i2][j2] == tileState::Empty)
-                                if(checkCondition(i2 - 1, j2 + 1, board_size))
-                                    if (game_board_state[i2-1][j2+1] == tileState::Empty)
                                             canKill = true;
                         }
                     }
@@ -768,8 +757,6 @@ bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::ve
                         for (int i2 = i + 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2++, j2--)
                         {
                             if (game_board_state[i2][j2] == tileState::Empty)
-                                if(checkCondition(i2 + 1, j2 - 1, board_size))
-                                    if (game_board_state[i2+1][j2-1] == tileState::Empty)
                                             canKill = true;
                         }
                     }
@@ -785,8 +772,6 @@ bool GameRules::checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::ve
                         for (int i2 = i - 1, j2 = j - 1; checkCondition(i2, j2, board_size) == true; i2--, j2--)
                         {
                             if (game_board_state[i2][j2] == tileState::Empty)
-                                if(checkCondition(i2 - 1, j2 - 1, board_size))
-                                    if (game_board_state[i2-1][j2-1] == tileState::Empty)
                                             canKill = true;
                         }
                     }

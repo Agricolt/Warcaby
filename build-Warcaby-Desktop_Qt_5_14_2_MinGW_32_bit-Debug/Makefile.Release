@@ -150,7 +150,8 @@ release/qrc_res.cpp: ../Warcaby/res.qrc \
 		../Warcaby/black_queen.png \
 		../Warcaby/white_queen.png \
 		../Warcaby/background_army.jpg \
-		../Warcaby/splash.jpg
+		../Warcaby/splash.jpg \
+		../Warcaby/background_main_army.jpg
 	D:\Qt\5.14.2\mingw73_32\bin\rcc.exe -name res ..\Warcaby\res.qrc -o release\qrc_res.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h

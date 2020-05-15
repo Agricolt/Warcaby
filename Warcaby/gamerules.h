@@ -18,7 +18,10 @@ public:
     areKillsObligatory;  //TODO
 
     //Głowna funkcja - sprawdza czy ruch wyslany przez silnik moze zostac wykonany
-    bool isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile, const std::vector<std::vector<tileState>>& game_board_state
+    //0 - ruch nie moze zostac wykonany
+    //1 - ruch moze zostac wykoanny z biciem
+    //2 - ruch moze zostac wykonany bez bicia
+    int isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile, const std::vector<std::vector<tileState>>& game_board_state
                     , const std::vector<Pawn*>& player_1_pawns, const std::vector<Pawn*>& player_2_pawns, bool whiteMove);
     //Wybiera pionki ktore moga sie ruszyc badz zbic innego pionka. W przypadku gdy sa pionki ktore moga bic, pionki ktore sie moga ruszyc sa nieistotne
     void selectPawnsAbleToMove(std::vector <Pawn*> &pawns_able_to_move, std::vector <Pawn*> &pawns_able_to_kill, bool whiteMove, const std::vector<Pawn*>& player_1_pawns

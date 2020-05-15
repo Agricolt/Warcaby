@@ -2,6 +2,7 @@
     <qresource prefix="/new/backgrounds">
         <file>background_army.jpg</file>
         <file>splash.jpg</file>
+        <file>background_main_army.jpg</file>
     </qresource>
     <qresource prefix="/music">
         <file>james_bond.mp3</file>

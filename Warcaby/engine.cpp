@@ -174,7 +174,8 @@ void Engine::mousePressEvent(QMouseEvent *ev)
         {
             this->selected_boardTile = selected_board_tile;
             this->selected_boardTile->setSelected();
-            bool fineMove = gr->isFineMove(selected_pawn, selected_boardTile, game_board_state, player_1_pawns, player_2_pawns, whiteMove);
+            last_move = gr->isFineMove(selected_pawn, selected_boardTile, game_board_state, player_1_pawns, player_2_pawns, whiteMove);
+            bool fineMove = last_move;
             if (fineMove)
                 movePawn();
             else
@@ -189,12 +190,21 @@ void Engine::movePawn()
 {
     //jesli pionek przeskoczyl o dwa miejsca to znaczy że zbija pionka drużyny przeciwnej
     bool killed_confirmed = false;
-    if (std::abs(selected_pawn->getPosition().x() - selected_boardTile->getPosition().x()) >= 2 || std::abs(selected_pawn->getPosition().y() - selected_boardTile->getPosition().y()) >= 2)
+    //std::abs(selected_pawn->getPosition().x() - selected_boardTile->getPosition().x()) >= 2 || std::abs(selected_pawn->getPosition().y() - selected_boardTile->getPosition().y()) >= 2
+    if (last_move == 1)
     {
         killed_confirmed = true;
         Pawn * pawn = findDeletingPawn();
-        game_board_state[pawn->getPosition().x()][pawn->getPosition().y()] = tileState::Killed;
-        pawn->pawn_state = tileState::Killed;
+        if (pawn != nullptr)
+        {
+            game_board_state[pawn->getPosition().x()][pawn->getPosition().y()] = tileState::Killed;
+            pawn->pawn_state = tileState::Killed;
+        }
+        else
+        {
+            clearPawnAndTileAfterTime(500);
+            return;
+        }
     }
     game_board_state[selected_pawn->getPosition().x()][selected_pawn->getPosition().y()] = tileState::Empty;  //Usun pionek ze starego miejsca
     selected_pawn->setPosition(selected_boardTile->getPosition());  //przypisz mu nowa pozycje
@@ -331,40 +341,65 @@ Pawn * Engine::findDeletingPawn()
         else
             which_colour = false;
         Pawn * deleted_pawn = nullptr;
+        Pawn * second_deleted_pawn = nullptr;
         //skos prawo dol
         for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i++, j++)
         {
-            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (deleted_pawn == nullptr)
+                deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            else if (second_deleted_pawn == nullptr)
+                second_deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
             if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
             {
-                return deleted_pawn;
+                if (deleted_pawn != nullptr && second_deleted_pawn == nullptr)
+                    return deleted_pawn;
+                else
+                    return nullptr;
             }
         }
         //skos lewo dol
         for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i--, j++)
         {
-            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (deleted_pawn == nullptr)
+                deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            else if (second_deleted_pawn == nullptr)
+                second_deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
             if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
             {
-                return deleted_pawn;
+                if (deleted_pawn != nullptr && second_deleted_pawn == nullptr)
+                    return deleted_pawn;
+                else
+                    return nullptr;
             }
         }
         //skos prawo gora
         for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i++, j--)
         {
-            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (deleted_pawn == nullptr)
+                deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            else if (second_deleted_pawn == nullptr)
+                second_deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
             if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
             {
-                return deleted_pawn;
+                if (deleted_pawn != nullptr && second_deleted_pawn == nullptr)
+                    return deleted_pawn;
+                else
+                    return nullptr;
             }
         }
         //skos lewo gora
         for (int i = selected_pawn->getPosition().x(), j = selected_pawn->getPosition().y(); gr->checkCondition(i, j, gr->board_size) == true; i--, j--)
         {
-            deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            if (deleted_pawn == nullptr)
+                deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
+            else if (second_deleted_pawn == nullptr)
+                second_deleted_pawn = selectPawnFromVector(QPoint(i, j), which_colour);
             if (i == selected_boardTile->getPosition().x() && j == selected_boardTile->getPosition().y())
             {
-                return deleted_pawn;
+                if (deleted_pawn != nullptr && second_deleted_pawn == nullptr)
+                    return deleted_pawn;
+                else
+                    return nullptr;
             }
         }
     }
@@ -424,8 +459,6 @@ Engine::Engine(gameType gT) :
     p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     p.fillRect(transparent.rect(), QColor(0, 0, 0, 100));
     p.end();
-    //******
-
     this->scene->setBackgroundBrush(QBrush(transparent));
     //wygladzanie krawedzi
     this->setRenderHints(QPainter::Antialiasing);

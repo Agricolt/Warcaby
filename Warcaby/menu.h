@@ -2,7 +2,10 @@
 #define MENU_H
 
 #include <QWidget>
+#include <QGraphicsView>
 
+#include <QObject>
+#include <QGraphicsView>
 namespace Ui {
 class Menu;
 }

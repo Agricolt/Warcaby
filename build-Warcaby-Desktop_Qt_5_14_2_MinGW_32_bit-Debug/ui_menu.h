@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
@@ -26,15 +27,17 @@ public:
     QVBoxLayout *verticalLayout;
     QPushButton *pushButton_startGameHotseat;
     QPushButton *pushButton_LogOutAndExit;
+    QGraphicsView *graphicsView_background;
 
     void setupUi(QWidget *Menu)
     {
         if (Menu->objectName().isEmpty())
             Menu->setObjectName(QString::fromUtf8("Menu"));
         Menu->resize(800, 600);
+        Menu->setAutoFillBackground(true);
         label_Welcome = new QLabel(Menu);
         label_Welcome->setObjectName(QString::fromUtf8("label_Welcome"));
-        label_Welcome->setGeometry(QRect(10, 20, 501, 171));
+        label_Welcome->setGeometry(QRect(10, 20, 751, 171));
         QFont font;
         font.setFamily(QString::fromUtf8("MV Boli"));
         font.setPointSize(48);
@@ -55,6 +58,13 @@ public:
 
         verticalLayout->addWidget(pushButton_LogOutAndExit);
 
+        graphicsView_background = new QGraphicsView(Menu);
+        graphicsView_background->setObjectName(QString::fromUtf8("graphicsView_background"));
+        graphicsView_background->setGeometry(QRect(0, 0, 801, 601));
+        graphicsView_background->setSceneRect(QRectF(0, 0, 800, 600));
+        graphicsView_background->raise();
+        layoutWidget->raise();
+        label_Welcome->raise();
 
         retranslateUi(Menu);
 
