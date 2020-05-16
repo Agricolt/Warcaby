@@ -1,7 +1,7 @@
 #include "credentialsvalidation.h"
 
 
-bool CredentialsValidation::Validate(QString login, QString password)
+bool CredentialsValidation::Validate(QString login, QString password) throw(CredentialsValidationError)
 {
     std::string got_login = login.toStdString();
     std::string got_pass = password.toStdString();
@@ -16,17 +16,19 @@ bool CredentialsValidation::Validate(QString login, QString password)
     {
         while(passwords_file.eof() != true)
         {
+
             passwords_file >> loginstd;
             passwords_file >> haslostd;
             if (loginstd == got_login && haslostd == got_pass)
                 return true;
         }
+        throw CredentialsValidationError();
     }
     passwords_file.close();
     return false;
 }
 
-bool CredentialsValidation::Register(QString login, QString password)
+bool CredentialsValidation::Register(QString login, QString password) throw(CredentialsValidationError)
 {
     std::string got_login = login.toStdString();
     std::string got_pass = password.toStdString();
@@ -44,7 +46,10 @@ bool CredentialsValidation::Register(QString login, QString password)
         passwords_file << "\n";
     }
     else
+    {
+        throw CredentialsValidationError();
         return false;
+    }
     passwords_file.close();
     return true;
 }
