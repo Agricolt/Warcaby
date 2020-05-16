@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include <QSplashScreen>
 #include <QMediaPlayer>
+#include <QThread>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     QPixmap pixmap(":/new/backgrounds/splash.jpg");
     QSplashScreen splash(pixmap);
     splash.show();
+    QThread::sleep(2);
     Widget w;
     w.show();
     splash.finish(&w);
