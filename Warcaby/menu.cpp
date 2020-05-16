@@ -10,12 +10,14 @@ void Menu::setLabel_Welcome(QString name)
     this->ui->label_Welcome->setText(text);
 }
 
-Menu::Menu(QWidget *parent) :
+Menu::Menu(QWidget *parent, QString player_name) :
     QWidget(parent),
-    ui(new Ui::Menu)
+    ui(new Ui::Menu),
+    player_name(player_name)
 {
     ui->setupUi(this);
-
+    this->setLabel_Welcome(player_name);
+    //Wczytuje plik tła, ustawia jego przezroczystosc tworzy scene dodaje scene do graphicsView oraz dodaje do tejze sceny uprzednio zaladowane tlo
     QImage image(":/new/backgrounds/background_main_army.jpg");
     QPixmap transparent(image.size());
     transparent.fill(Qt::transparent);
@@ -45,7 +47,14 @@ void Menu::on_pushButton_LogOutAndExit_clicked()
 
 void Menu::on_pushButton_startGameHotseat_clicked()
 {
-    Engine *eng = new Engine(gameType::Brazilian);
+    Engine *eng = new Engine(gameType::Brazilian, player_name);
     eng->show();
     this->on_pushButton_LogOutAndExit_clicked();
+}
+
+void Menu::on_pushButton_ExitOnly_clicked()
+{
+    Widget * widget = new Widget();
+    this->close();
+    widget->show();
 }

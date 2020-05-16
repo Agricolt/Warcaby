@@ -216,6 +216,11 @@ void Engine::movePawn()
     removeKillesPawns();
     clearPawnAndTileAfterTime(500);
     checkForQueens();
+    int finish = checkForFinish();
+    if (finish == 1)
+        label->setText("Zwycięstwo białych!");
+    else if (finish == 2)
+        label->setText("Zwycięstwo czarnych!");
 }
 
 void Engine::wrongMove()
@@ -277,6 +282,15 @@ void Engine::checkForQueens()
             (*i).transformToQueen();
         }
     }
+}
+
+int Engine::checkForFinish()
+{
+    if (player_2_pawns.empty())
+        return 1;
+    if (player_1_pawns.empty())
+        return 2;
+    return 0;
 }
 
 Pawn * Engine::findDeletingPawn()
@@ -436,12 +450,12 @@ void Engine::handleExitButton()
 {
     this->close();
     this->destroy();
-    Menu *menu = new Menu();
+    Menu *menu = new Menu(nullptr, player_name);
     menu->show();
 }
 
-Engine::Engine(gameType gT) :
-    selected_pawn(nullptr), selected_boardTile(nullptr)
+Engine::Engine(gameType gT, QString player_name) :
+    selected_pawn(nullptr), selected_boardTile(nullptr), player_name(player_name)
 {
     this->gr = new GameRules(gT);
     whiteMove = gr->whiteFirstMove;
@@ -462,13 +476,16 @@ Engine::Engine(gameType gT) :
     this->scene->setBackgroundBrush(QBrush(transparent));
     //wygladzanie krawedzi
     this->setRenderHints(QPainter::Antialiasing);
+
+    //ustaw scene do tego okna (widgetu)
     this->setScene(scene);
 
     //wylacz paski przesuwania
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    //ustaw scene do tego okna (widgetu)
+    //************************koniec inicjalizacji okna sceny********************
+    //ustawia okno na środek ekranu dla rozdzielczości FullHD TODO: można zmienić na dostosowanie się do rozdzcielczosci
+    this->window()->setGeometry(560, 240, 800, 600);
 
     //Zainicjalizuj tablice plytek
     this->initializeBoard(8);
@@ -481,8 +498,12 @@ Engine::Engine(gameType gT) :
     exitButton->setGeometry(650, 550, 100, 30);
     QObject::connect(exitButton, SIGNAL(released()), this, SLOT(handleExitButton()));
     //
+    //Dodaj label informujacy o wygranej
+    label = new QLabel(this);
+    this->scene->addWidget(label);
+    label->setGeometry(10, 5, 750, 100);
+    label->setFont(QFont("MV Boli", 50, 10));
     //teraz silnik czeka na dane od gracza (klikniecia)
-
 }
 
 void Engine::printBoardState(int board_size)

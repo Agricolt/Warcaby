@@ -6,6 +6,8 @@
 
 #include <QObject>
 #include <QGraphicsView>
+
+#include "widget.h"
 namespace Ui {
 class Menu;
 }
@@ -16,7 +18,7 @@ class Menu : public QWidget
 
 public:
     void setLabel_Welcome(QString name);
-    explicit Menu(QWidget *parent = nullptr);
+    explicit Menu(QWidget *parent = nullptr, QString player_name = "");
     ~Menu();
 
 private slots:
@@ -24,8 +26,11 @@ private slots:
 
     void on_pushButton_startGameHotseat_clicked();
 
+    void on_pushButton_ExitOnly_clicked();
+
 private:
     Ui::Menu *ui;
+    QString player_name;
 };
 
 #endif // MENU_H

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Warcaby - Menu główne</string>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -22,13 +22,13 @@
      <x>10</x>
      <y>20</y>
      <width>751</width>
-     <height>171</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>MV Boli</family>
-     <pointsize>48</pointsize>
+     <pointsize>64</pointsize>
     </font>
    </property>
    <property name="text">
@@ -49,6 +49,13 @@
      <widget class="QPushButton" name="pushButton_startGameHotseat">
       <property name="text">
        <string>Rozpocznij grę na 2 osoby (hotseat)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_ExitOnly">
+      <property name="text">
+       <string>Wyjdź</string>
       </property>
      </widget>
     </item>
@@ -79,9 +86,29 @@
     </rectf>
    </property>
   </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>761</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>MV Boli</family>
+     <pointsize>36</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Piękna pogoda na partię warcab!</string>
+   </property>
+  </widget>
   <zorder>graphicsView_background</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>label_Welcome</zorder>
+  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

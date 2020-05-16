@@ -16,6 +16,7 @@
 #include <vector>
 #include <QtDebug>
 #include <QPushButton>
+#include <QLabel>
 #include <QMouseEvent>
 #include <typeinfo>
 #include <QImage>
@@ -47,6 +48,8 @@ class Engine : public QGraphicsView
     GameRules *gr;
 
     int board_size;
+    QString player_name;
+    QLabel *label;
 
     //0 - ruch zostal wykonany
     //1 - ruch zostal wykoanny z biciem
@@ -64,18 +67,21 @@ class Engine : public QGraphicsView
     void movePawn();                             //Przemieszcza pionka na wskazaną plytke i wywoluje metode clearPawnAndTileAfterTime()
     void wrongMove();                            //koloruje pionek i plytke na czerwono i wywoluje metode clearPawnAndTileAfterTime()
     void clearPawnAndTileAfterTime(int time);    //Ustawia domyslny kolor i ZERUJE wskazniki na pionek i plytke!!!
-    void removeKillesPawns();
-    void checkForQueens();
-    Pawn * findDeletingPawn();
-    Pawn * selectPawnFromVector(QPoint pt, bool which_colour);
+    void removeKillesPawns();                    //Usuwa pionki, ktore zostaly zabite
+    void checkForQueens();                       //sprawdza czy są nowe damki
+    int checkForFinish();                        //Sprawdza czy gra sie zakonczyla. 1 - gre wygraly biale, 2 - gre wygraly czarne 0 - gra sie nie zakonczyla
+    Pawn * findDeletingPawn();                   //znajduje zabijany pionek
+    Pawn * selectPawnFromVector(QPoint pt, bool which_colour); //Znajduje pionek o podanej pozycji we wskazanym kolorze
     //********************************************
 public slots:
     void handleExitButton();
 public:
-    Engine(gameType gT);
+    Engine(gameType gT, QString player_name);    //kontruktor
+    //***********DEBUG*********************
     void printPawns(int pawns_in_row);
     void printBoardState(int board_size);
     void printBoardWithPawns(int board_size);
+    //*************************************
 };
 
 #endif // ENGINE_H

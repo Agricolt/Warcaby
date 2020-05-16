@@ -35,6 +35,7 @@ public:
     QLineEdit *lineEditPassword;
     QVBoxLayout *verticalLayout_3;
     QLabel *label_IncorrectCredentials;
+    QPushButton *pushButton_register;
     QCheckBox *checkBox;
     QPushButton *pushButtonLogIn;
     QPushButton *pushButtonExit;
@@ -44,12 +45,12 @@ public:
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
         Widget->setWindowModality(Qt::WindowModal);
-        Widget->resize(300, 200);
+        Widget->resize(320, 250);
         Widget->setMinimumSize(QSize(300, 200));
-        Widget->setMaximumSize(QSize(300, 200));
+        Widget->setMaximumSize(QSize(350, 250));
         layoutWidget = new QWidget(Widget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(60, 20, 192, 174));
+        layoutWidget->setGeometry(QRect(70, 20, 192, 202));
         verticalLayout_4 = new QVBoxLayout(layoutWidget);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
@@ -96,6 +97,11 @@ public:
 
         verticalLayout_3->addWidget(label_IncorrectCredentials);
 
+        pushButton_register = new QPushButton(layoutWidget);
+        pushButton_register->setObjectName(QString::fromUtf8("pushButton_register"));
+
+        verticalLayout_3->addWidget(pushButton_register);
+
         checkBox = new QCheckBox(layoutWidget);
         checkBox->setObjectName(QString::fromUtf8("checkBox"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -133,6 +139,7 @@ public:
         labelLogin->setText(QCoreApplication::translate("Widget", "Login: ", nullptr));
         labelPassword->setText(QCoreApplication::translate("Widget", "Has\305\202o: ", nullptr));
         label_IncorrectCredentials->setText(QString());
+        pushButton_register->setText(QCoreApplication::translate("Widget", "Zarejestruj si\304\231", nullptr));
 #if QT_CONFIG(tooltip)
         checkBox->setToolTip(QString());
 #endif // QT_CONFIG(tooltip)

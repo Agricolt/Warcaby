@@ -19,6 +19,8 @@ private slots:
     void on_pushButtonLogIn_clicked();
     void on_pushButtonExit_clicked();
 
+    void on_pushButton_register_clicked();
+
 private:
     Ui::Widget *ui;
 };

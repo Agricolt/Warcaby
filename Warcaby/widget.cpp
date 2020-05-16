@@ -24,11 +24,10 @@ void Widget::on_pushButtonLogIn_clicked()
     //pobranie loginu i hasla do dalszej walidacji
     QString login = ui->lineEditLogin->text();
     QString password = ui->lineEditPassword->text();
-    if (CredentialsValidation::validate(login, password) == true)
+    if (CredentialsValidation::Validate(login, password) == true)
     {
-        Menu *m = new Menu();
+        Menu *m = new Menu(nullptr, login);
         Widget::on_pushButtonExit_clicked();
-        m->setLabel_Welcome(login);
         m->show();
     }
     else
@@ -43,4 +42,29 @@ void Widget::on_pushButtonLogIn_clicked()
 void Widget::on_pushButtonExit_clicked()
 {
     this->close();
+}
+
+void Widget::on_pushButton_register_clicked()
+{
+    QString login = ui->lineEditLogin->text();
+    QString password = ui->lineEditPassword->text();
+    bool register_complete = false;
+    if (login.isEmpty() != true && password.isEmpty() != true)
+        register_complete = CredentialsValidation::Register(login, password);
+    if (register_complete == true)
+    {
+        QColor color = Qt::green;
+        QPalette palette = ui->label_IncorrectCredentials->palette();
+        palette.setColor(QPalette::WindowText, color);
+        ui->label_IncorrectCredentials->setPalette(palette);
+        ui->label_IncorrectCredentials->setText("Pomyślnie zarejestrowano!");
+    }
+    else
+    {
+        QColor color = Qt::red;
+        QPalette palette = ui->label_IncorrectCredentials->palette();
+        palette.setColor(QPalette::WindowText, color);
+        ui->label_IncorrectCredentials->setPalette(palette);
+        ui->label_IncorrectCredentials->setText("Dany login jest już zajęty!");
+    }
 }
