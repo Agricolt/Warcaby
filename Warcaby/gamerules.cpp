@@ -148,7 +148,6 @@ int GameRules::checkSurrounding(Pawn *selected_pawn, const std::vector<std::vect
     //********************************FOR QUEENS*********************************
     if (selected_pawn->pawn_state == tileState::WhiteQueen || selected_pawn->pawn_state == tileState::BlackQueen)
     {
-        int nr_of_pawns_in_way = 0; //zapobiega sytuacji w ktorej damka "pomysli" ze moze przeskoczyc i zabic wiecej niz jednego pionka
         tileState colour_to_kill1, colour_to_kill12;
         if (selected_pawn->pawn_state == tileState::WhiteQueen)
         {

@@ -4,8 +4,12 @@
 #include <QWidget>
 #include <fstream>
 #include <QtDebug>
+#include <regex>
+#include <QMessageBox>
 
-class CredentialsValidationError
+#include "exceptions.h"
+
+class CredentialsValidationError : public Exceptions
 {
 public:
     std::string what()
@@ -14,11 +18,18 @@ public:
     }
 };
 
-class CredentialsValidation
+class PasswordValidation
+{
+public:
+    static bool ValidatePasswordWithRegex(std::string password);
+};
+
+class CredentialsValidation : public PasswordValidation
 {
 public:
     static bool Validate(QString login, QString password) throw(CredentialsValidationError);
     static bool Register(QString login, QString password) throw(CredentialsValidationError);
 };
+
 
 #endif // CREDENTIALSVALIDATION_H

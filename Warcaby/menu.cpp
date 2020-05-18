@@ -58,3 +58,10 @@ void Menu::on_pushButton_ExitOnly_clicked()
     this->close();
     widget->show();
 }
+
+void Menu::on_pushButton_LoadLastGame_clicked()
+{
+    Engine *eng = new Engine(gameType::Brazilian, player_name, true);
+    eng->show();
+    this->on_pushButton_LogOutAndExit_clicked();
+}

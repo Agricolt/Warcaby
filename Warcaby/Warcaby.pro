@@ -20,12 +20,14 @@ SOURCES += \
     boardtile.cpp \
     credentialsvalidation.cpp \
     engine.cpp \
+    exceptions.cpp \
     gamerules.cpp \
     lista.cpp \
     main.cpp \
     menu.cpp \
     pawn.cpp \
     player.cpp \
+    saveandloadgame.cpp \
     widget.cpp
 
 HEADERS += \
@@ -33,11 +35,13 @@ HEADERS += \
     boardtile.h \
     credentialsvalidation.h \
     engine.h \
+    exceptions.h \
     gamerules.h \
     lista.h \
     menu.h \
     pawn.h \
     player.h \
+    saveandloadgame.h \
     widget.h
 
 FORMS += \

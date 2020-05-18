@@ -26,6 +26,7 @@ public:
     QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QPushButton *pushButton_startGameHotseat;
+    QPushButton *pushButton_LoadLastGame;
     QPushButton *pushButton_ExitOnly;
     QPushButton *pushButton_LogOutAndExit;
     QGraphicsView *graphicsView_background;
@@ -46,7 +47,7 @@ public:
         label_Welcome->setFont(font);
         layoutWidget = new QWidget(Menu);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(280, 240, 217, 98));
+        layoutWidget->setGeometry(QRect(280, 240, 217, 112));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -54,6 +55,11 @@ public:
         pushButton_startGameHotseat->setObjectName(QString::fromUtf8("pushButton_startGameHotseat"));
 
         verticalLayout->addWidget(pushButton_startGameHotseat);
+
+        pushButton_LoadLastGame = new QPushButton(layoutWidget);
+        pushButton_LoadLastGame->setObjectName(QString::fromUtf8("pushButton_LoadLastGame"));
+
+        verticalLayout->addWidget(pushButton_LoadLastGame);
 
         pushButton_ExitOnly = new QPushButton(layoutWidget);
         pushButton_ExitOnly->setObjectName(QString::fromUtf8("pushButton_ExitOnly"));
@@ -91,6 +97,7 @@ public:
         Menu->setWindowTitle(QCoreApplication::translate("Menu", "Warcaby - Menu g\305\202\303\263wne", nullptr));
         label_Welcome->setText(QCoreApplication::translate("Menu", "Witaj <login>", nullptr));
         pushButton_startGameHotseat->setText(QCoreApplication::translate("Menu", "Rozpocznij gr\304\231 na 2 osoby (hotseat)", nullptr));
+        pushButton_LoadLastGame->setText(QCoreApplication::translate("Menu", "Wczytaj ostatni\304\205 gr\304\231", nullptr));
         pushButton_ExitOnly->setText(QCoreApplication::translate("Menu", "Wyjd\305\272", nullptr));
         pushButton_LogOutAndExit->setText(QCoreApplication::translate("Menu", "Wyloguj i wyjd\305\272", nullptr));
         label->setText(QCoreApplication::translate("Menu", "Pi\304\231kna pogoda na parti\304\231 warcab!", nullptr));

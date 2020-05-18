@@ -1,12 +1,14 @@
 debug/boardtile.o
 debug/credentialsvalidation.o
 debug/engine.o
+debug/exceptions.o
 debug/gamerules.o
 debug/lista.o
 debug/main.o
 debug/menu.o
 debug/pawn.o
 debug/player.o
+debug/saveandloadgame.o
 debug/widget.o
 debug/qrc_res.o
 debug/moc_boardtile.o

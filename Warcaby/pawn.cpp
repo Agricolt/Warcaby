@@ -37,9 +37,17 @@ Pawn::Pawn(tileState ps, QObject *parent) :
     {
         this->setBrush(QBrush(dark_pawn));
     }
-    else
+    else if (ps == tileState::WhitePawn)
     {
         this->setBrush(QBrush(light_pawn));
+    }
+    else if (ps == tileState::WhiteQueen)
+    {
+        this->setBrush(QBrush(light_queen));
+    }
+    else if (ps == tileState::BlackPawn)
+    {
+        this->setBrush(QBrush(dark_queen));
     }
     setPen(QPen(QBrush(), 0));
 }

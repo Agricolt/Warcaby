@@ -131,6 +131,74 @@ void Engine::placePawns(int pawns_count, int board_size)
     }
 }
 
+void Engine::placePawns(std::string saved)
+{
+    qDebug() << QString::fromStdString(saved);
+    int x, y;
+    //iteruj po tablicy płytek
+    //[c][r]
+    int iteracja = 0;
+    for (unsigned int j = 0; j < game_board_state.size(); j++)
+    {
+        for (unsigned int i = 0; i < game_board_state.size(); i++)
+        {
+            if (saved[iteracja] == '0')
+            {
+                //do nothing
+            }
+            else if (saved[iteracja] == '1')
+            {
+                x = game_board_T[i][j]->pos().x();
+                y = game_board_T[i][j]->pos().y();
+                Pawn *p = new Pawn(tileState::WhitePawn);
+                p->setPosition(QPoint(i, j));
+                p->setPos(x + 5, y + 5);
+                //dodaj do sceny
+                this->scene->addItem(p);
+                player_1_pawns.push_back(p);
+                game_board_state[i][j] = tileState::WhitePawn;
+            }
+            else if (saved[iteracja] == '2')
+            {
+                x = game_board_T[i][j]->pos().x();
+                y = game_board_T[i][j]->pos().y();
+                Pawn *p = new Pawn(tileState::BlackPawn);
+                p->setPosition(QPoint(i, j));
+                p->setPos(x + 5, y + 5);
+                //dodaj do sceny
+                this->scene->addItem(p);
+                player_2_pawns.push_back(p);
+                game_board_state[i][j] = tileState::BlackPawn;
+            }
+            else if (saved[iteracja] == '3')
+            {
+                x = game_board_T[i][j]->pos().x();
+                y = game_board_T[i][j]->pos().y();
+                Pawn *p = new Pawn(tileState::WhiteQueen);
+                p->setPosition(QPoint(i, j));
+                p->setPos(x + 5, y + 5);
+                //dodaj do sceny
+                this->scene->addItem(p);
+                player_1_pawns.push_back(p);
+                game_board_state[i][j] = tileState::WhiteQueen;
+            }
+            else if (saved[iteracja] == '4')
+            {
+                x = game_board_T[i][j]->pos().x();
+                y = game_board_T[i][j]->pos().y();
+                Pawn *p = new Pawn(tileState::BlackQueen);
+                p->setPosition(QPoint(i, j));
+                p->setPos(x + 5, y + 5);
+                //dodaj do sceny
+                this->scene->addItem(p);
+                player_2_pawns.push_back(p);
+                game_board_state[i][j] = tileState::BlackQueen;
+            }
+            iteracja++;
+        }
+    }
+}
+
 void Engine::mousePressEvent(QMouseEvent *ev)
 {
     QPoint pt(ev->x(), ev->y());
@@ -287,9 +355,15 @@ void Engine::checkForQueens()
 int Engine::checkForFinish()
 {
     if (player_2_pawns.empty())
+    {
         return 1;
+        game_ended = true;
+    }
     if (player_1_pawns.empty())
+    {
         return 2;
+        game_ended = true;
+    }
     return 0;
 }
 
@@ -445,17 +519,28 @@ Pawn *Engine::selectPawnFromVector(QPoint pt, bool which_colour)
     return nullptr;
 }
 
-
 void Engine::handleExitButton()
 {
-    this->close();
-    this->destroy();
-    Menu *menu = new Menu(nullptr, player_name);
-    menu->show();
+    if (game_ended == false)
+    {
+        std::string plik = player_name.toStdString();
+        try
+        {
+            this->saveTheGame(plik, game_board_state);
+        }
+        catch (fileSaveError e)
+        {
+            std::cout << e.what();
+        }
+    }
+     this->close();
+     this->destroy();
+     Menu *menu = new Menu(nullptr, player_name);
+     menu->show();
 }
 
 Engine::Engine(gameType gT, QString player_name) :
-    selected_pawn(nullptr), selected_boardTile(nullptr), player_name(player_name)
+    selected_pawn(nullptr), selected_boardTile(nullptr), player_name(player_name), game_ended(false)
 {
     this->gr = new GameRules(gT);
     whiteMove = gr->whiteFirstMove;
@@ -492,6 +577,57 @@ Engine::Engine(gameType gT, QString player_name) :
     //Stworz pionki
     this->placePawns(12, 8);
 
+    //Dodaj przycisk wyjścia
+    QPushButton * exitButton = new QPushButton("Wyjdź", this);
+    this->scene->addWidget(exitButton);
+    exitButton->setGeometry(650, 550, 100, 30);
+    QObject::connect(exitButton, SIGNAL(released()), this, SLOT(handleExitButton()));
+    //
+    //Dodaj label informujacy o wygranej
+    label = new QLabel(this);
+    this->scene->addWidget(label);
+    label->setGeometry(10, 5, 750, 100);
+    label->setFont(QFont("MV Boli", 50, 10));
+    //teraz silnik czeka na dane od gracza (klikniecia)
+}
+
+Engine::Engine(gameType gT, QString player_name, bool have_a_saved_game)
+    : selected_pawn(nullptr), selected_boardTile(nullptr), player_name(player_name), game_ended(false)
+{
+    this->gr = new GameRules(gT);
+    whiteMove = gr->whiteFirstMove;
+    //ustal rozmiar sceny
+    scene = new QGraphicsScene(0, 0, 800, 600, this);
+
+    //*****Ustala przezroczystosc tla
+    QImage image(":/new/backgrounds/background_army.jpg");
+    QPixmap transparent(image.size());
+    transparent.fill(Qt::transparent);
+    QPainter p;
+    p.begin(&transparent);
+    p.setCompositionMode(QPainter::CompositionMode_Source);
+    p.drawPixmap(0, 0, QPixmap::fromImage(image));
+    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    p.fillRect(transparent.rect(), QColor(0, 0, 0, 100));
+    p.end();
+    this->scene->setBackgroundBrush(QBrush(transparent));
+    //wygladzanie krawedzi
+    this->setRenderHints(QPainter::Antialiasing);
+
+    //ustaw scene do tego okna (widgetu)
+    this->setScene(scene);
+
+    //wylacz paski przesuwania
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //************************koniec inicjalizacji okna sceny********************
+    //ustawia okno na środek ekranu dla rozdzielczości FullHD TODO: można zmienić na dostosowanie się do rozdzcielczosci
+    this->window()->setGeometry(560, 240, 800, 600);
+    //**********************WczytanieGry**********************
+    initializeBoard(8);
+    placePawns(loadTheGame(player_name.toStdString()));
+
+    //********************************************************
     //Dodaj przycisk wyjścia
     QPushButton * exitButton = new QPushButton("Wyjdź", this);
     this->scene->addWidget(exitButton);

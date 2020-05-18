@@ -41,7 +41,7 @@
      <x>280</x>
      <y>240</y>
      <width>217</width>
-     <height>98</height>
+     <height>112</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -49,6 +49,13 @@
      <widget class="QPushButton" name="pushButton_startGameHotseat">
       <property name="text">
        <string>Rozpocznij grę na 2 osoby (hotseat)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_LoadLastGame">
+      <property name="text">
+       <string>Wczytaj ostatnią grę</string>
       </property>
      </widget>
     </item>

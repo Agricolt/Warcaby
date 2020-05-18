@@ -1,12 +1,14 @@
 release/boardtile.o
 release/credentialsvalidation.o
 release/engine.o
+release/exceptions.o
 release/gamerules.o
 release/lista.o
 release/main.o
 release/menu.o
 release/pawn.o
 release/player.o
+release/saveandloadgame.o
 release/widget.o
 release/qrc_res.o
 release/moc_boardtile.o

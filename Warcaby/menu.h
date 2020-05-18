@@ -28,6 +28,8 @@ private slots:
 
     void on_pushButton_ExitOnly_clicked();
 
+    void on_pushButton_LoadLastGame_clicked();
+
 private:
     Ui::Menu *ui;
     QString player_name;

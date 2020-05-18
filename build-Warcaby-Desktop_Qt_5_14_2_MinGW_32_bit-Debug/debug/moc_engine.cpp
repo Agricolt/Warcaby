@@ -96,6 +96,8 @@ void *Engine::qt_metacast(const char *_clname)
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_Engine.stringdata0))
         return static_cast<void*>(this);
+    if (!strcmp(_clname, "saveAndLoadGame"))
+        return static_cast< saveAndLoadGame*>(this);
     return QGraphicsView::qt_metacast(_clname);
 }
 

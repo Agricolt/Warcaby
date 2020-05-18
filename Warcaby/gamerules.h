@@ -11,18 +11,20 @@
 class GameRules
 {
 public:
-    int board_size;
-    bool whiteFirstMove, //used
-    canKillBackwards, //used
-    canKillMoreThanOnce, //can be used
-    areKillsObligatory;  //TODO
-
     //Głowna funkcja - sprawdza czy ruch wyslany przez silnik moze zostac wykonany
-    //0 - ruch nie moze zostac wykonany
-    //1 - ruch moze zostac wykoanny z biciem
-    //2 - ruch moze zostac wykonany bez bicia
     int isFineMove(Pawn * selected_pawn, boardTile * selected_board_tile, const std::vector<std::vector<tileState>>& game_board_state
                     , const std::vector<Pawn*>& player_1_pawns, const std::vector<Pawn*>& player_2_pawns, bool whiteMove);
+    //Zwraca true jesli jest mozliwe jakiekolwiek bicie wokol pionka
+    bool checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::vector<tileState>>& game_board_state);
+    //Sprawdza czy nie wychodzimy poza tablice - zapobiega błędom krytycznym
+    bool checkCondition(int x, int y, int board_size);
+    int board_size;
+    bool whiteFirstMove;
+    GameRules(gameType gt);
+private:
+    bool canKillBackwards;
+    bool canKillMoreThanOnce;
+    bool areKillsObligatory;
     //Wybiera pionki ktore moga sie ruszyc badz zbic innego pionka. W przypadku gdy sa pionki ktore moga bic, pionki ktore sie moga ruszyc sa nieistotne
     void selectPawnsAbleToMove(std::vector <Pawn*> &pawns_able_to_move, std::vector <Pawn*> &pawns_able_to_kill, bool whiteMove, const std::vector<Pawn*>& player_1_pawns
                                , const std::vector<Pawn*>& player_2_pawns, const std::vector<std::vector<tileState>>& game_board_state);
@@ -33,11 +35,6 @@ public:
     bool findMoveInNonKillMoves(lista::el* el, Pawn* selected_pawn, const std::vector<std::vector<tileState>>& game_board_state);
     //Pobiera ruch a nastepnie sprawdza czy dany pionek moze wykonac dane bicie
     bool findMoveInKillMoves(lista::el* el, Pawn* selected_pawn, const std::vector<std::vector<tileState>>& game_board_state);
-    //Zwraca true jesli jest mozliwe jakiekolwiek bicie wokol pionka
-    bool checkKillsOpportunities(Pawn *selected_pawn, std::vector<std::vector<tileState>>& game_board_state);
-    //Sprawdza czy nie wychodzimy poza tablice - zapobiega błędom krytycznym
-    bool checkCondition(int x, int y, int board_size);
-    GameRules(gameType gt);
 };
 
 #endif // GAMERULES_H
